@@ -156,7 +156,7 @@ async def handler_animation(message: Message, bot: BotAI) -> None:
 
     await bot.download(message.animation, "video2.mp4")
     video_file = genai2.upload_file(path="video2.mp4")
-    await asyncio.sleep(1)
+    await asyncio.sleep(5)
 
     worksheet.update([[
         message.message_id, message_transformed.date, "Gif", "",
@@ -185,7 +185,7 @@ async def handler_video(message: Message, bot: BotAI) -> None:
     await bot.download(message.video, "video3.mp4")
     video_file = genai2.upload_file(path="video3.mp4")
     message_caption = message.caption if message.caption else ''
-    await asyncio.sleep(1)
+    await asyncio.sleep(5)
 
     worksheet.update([[
         message.message_id, message_transformed.date, "Video", message_caption,
@@ -235,7 +235,7 @@ async def handler_poll(message: Message, bot: BotAI) -> None:
     #     ]).text)
 
 
-@dp.message(F.document)
+# @dp.message(F.document)
 async def handler_document(message: Message, bot: BotAI) -> None:
     file_document: io.BytesIO = await bot.download(message.document)
     message_caption = message.caption if message.caption else ''
@@ -249,7 +249,7 @@ async def handler_document(message: Message, bot: BotAI) -> None:
         ]).text)
 
 
-@dp.message(F.voice)
+# @dp.message(F.voice)
 async def handler_voice(message: Message, bot: BotAI) -> None:
     file_voice: io.BytesIO = await bot.download(message.voice)
 
@@ -276,7 +276,7 @@ async def handler_stikcer_video(message: Message, bot: BotAI) -> None:
 
     await bot.download(message.sticker, "video.mp4")
     video_file = genai2.upload_file(path="video.mp4")
-    await asyncio.sleep(1)
+    await asyncio.sleep(2)
 
     worksheet.update([[
         message.message_id, message_transformed.date, "Sticker",
