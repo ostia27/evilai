@@ -14,6 +14,7 @@ from aiogram.types import Message, Poll
 from attrs import define
 
 from aigen import GenAI
+from keep_alive import keep_alive
 
 
 @define
@@ -299,6 +300,7 @@ async def handler_stikcer_video(message: Message, bot: BotAI) -> None:
 
 async def main() -> None:
     bot = BotAI(token=TOKEN)
+    keep_alive()
     # And the run events dispatching
     await dp.start_polling(bot)
 
