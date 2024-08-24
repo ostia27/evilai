@@ -1,16 +1,10 @@
-from threading import Thread
+from aiohttp import web
 
-from flask import Flask
 
-app = Flask(__name__)
+async def hello(request):
+    return web.Response(text="Hello, world")
 
-@app.route('/')
-def index():
-  return 'alive'
+app = web.Application()
+app.add_routes([web.get('/', hello)])
 
-def run():
-  app.run(host='0.0.0.0', port=8080)
-
-def keep_alive():
-  thread = Thread(target=run)
-  thread.start()
+web.run_app(app, host="0.0.0.0", port=80)

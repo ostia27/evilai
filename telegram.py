@@ -9,12 +9,12 @@ from typing import Iterable
 import google.generativeai as genai2
 import gspread
 import PIL.Image
+from subprocess import Popen
 from aiogram import Bot, Dispatcher, F
 from aiogram.types import Message, Poll
 from attrs import define
 
 from aigen import GenAI
-from keep_alive import keep_alive
 
 
 @define
@@ -300,11 +300,11 @@ async def handler_stikcer_video(message: Message, bot: BotAI) -> None:
 
 async def main() -> None:
     bot = BotAI(token=TOKEN)
-    keep_alive()
     # And the run events dispatching
     await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+    Popen(["python", "keep_alive.py"])
     asyncio.run(main())
