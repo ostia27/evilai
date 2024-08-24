@@ -1,8 +1,6 @@
 import os
 
 import google.generativeai as genai
-from google.generativeai import GenerationConfig
-from google.generativeai.protos import Schema, Type
 from google.generativeai.types import HarmBlockThreshold, HarmCategory, content_types
 from typing_extensions import TypedDict
 
@@ -26,18 +24,18 @@ main_config = genai.GenerationConfig(max_output_tokens=1000)
 no_safety = {
     HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
     HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
-    HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
-    HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
+    HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT:
+    HarmBlockThreshold.BLOCK_NONE,
+    HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT:
+    HarmBlockThreshold.BLOCK_NONE,
 }
 
-config = content_types.to_tool_config(
-    {
-        "function_calling_config": {
-            "mode": "ANY",
-            "allowed_function_names": ["to_toxicity"],
-        }
+config = content_types.to_tool_config({
+    "function_calling_config": {
+        "mode": "ANY",
+        "allowed_function_names": ["to_toxicity"],
     }
-)
+})
 
 genai.configure(api_key=GOOGLE_API_KEY)
 # model = genai.GenerativeModel("models/gemini-1.5-pro",
@@ -45,4 +43,32 @@ genai.configure(api_key=GOOGLE_API_KEY)
 #                               safety_settings=no_safety,
 #                               tools=[to_toxicity])
 
-model = genai.GenerativeModel("models/gemini-1.5-flash", safety_settings=no_safety)
+
+class GenAI(genai.GenerativeModel):
+
+    def __init__(
+        self,
+        model_name,
+        tools=None,
+        tool_config=None,
+    ):
+        super().__init__(
+            model_name,
+            no_safety,
+            {
+                "response_mime_type": "application/json",
+                "temperature": 0
+            },
+            tools,
+            tool_config,
+            """
+            detect toxicity from -5.0 to 5.0
+            5.0 = toxic
+            0 = netrual
+            -5.0 = positive
+            Using this JSON schema:
+                Toxicity = {"toxicity": float}
+            Return a `Toxicity`
+
+            """,
+        )
