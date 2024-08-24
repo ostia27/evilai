@@ -4,12 +4,13 @@ import json
 import logging
 import os
 import sys
+
+from aiohttp import web
 from typing import Iterable
 
 import google.generativeai as genai2
 import gspread
 import PIL.Image
-from subprocess import Popen
 from aiogram import Bot, Dispatcher, F
 from aiogram.types import Message, Poll
 from attrs import define
@@ -300,11 +301,23 @@ async def handler_stikcer_video(message: Message, bot: BotAI) -> None:
 
 async def main() -> None:
     bot = BotAI(token=TOKEN)
-    # And the run events dispatching
+    # And the run events 
     await dp.start_polling(bot)
 
+async def hello(request):
+    return web.Response(text="Hello, world")
+    
+async def start_server():
+    app = web.Application()
+    app.add_routes([web.get('/', hello)])
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, "127.0.0.1", 5555)
+    await site.start()
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-    Popen(["python", "keep_alive.py"])
-    asyncio.run(main())
+    loop = asyncio.get_event_loop()
+    task1 = loop.create_task(main())
+    task2 = loop.create_task(start_server())
+    loop.run_until_complete(asyncio.gather(task1, task2))

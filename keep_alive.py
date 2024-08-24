@@ -6,5 +6,3 @@ async def hello(request):
 
 app = web.Application()
 app.add_routes([web.get('/', hello)])
-
-web.run_app(app, host="0.0.0.0", port=80)
