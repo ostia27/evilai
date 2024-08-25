@@ -4,8 +4,6 @@ import json
 import logging
 import os
 import sys
-
-from aiohttp import web
 from typing import Iterable
 
 import google.generativeai as genai2
@@ -13,6 +11,7 @@ import gspread
 import PIL.Image
 from aiogram import Bot, Dispatcher, F
 from aiogram.types import Message, Poll
+from aiohttp import web
 from attrs import define
 
 from aigen import GenAI
@@ -308,12 +307,13 @@ async def hello(request):
     return web.Response(text="Hello, world")
     
 async def start_server():
-    app = web.Application()
-    app.add_routes([web.get('/', hello)])
-    runner = web.AppRunner(app)
-    await runner.setup()
-    site = web.TCPSite(runner, "127.0.0.1", 5555)
-    await site.start()
+    pass
+    # app = web.Application()
+    # app.add_routes([web.get('/', hello)])
+    # runner = web.AppRunner(app)
+    # await runner.setup()
+    # site = web.TCPSite(runner, "localhost", 5555)
+    # await site.start()
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
