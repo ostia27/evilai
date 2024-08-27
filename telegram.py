@@ -66,7 +66,7 @@ async def handler_text(message: Message, bot: BotAI) -> None:
 
     message_transformed = MessageTransformed(message)
     i = int(worksheet.get('F1')[0][0])
-    worksheet.update_acell('F1', i + 1)
+    worksheet.a('F1', i + 1)
     worksheet.update([[
         message.message_id, message_transformed.date, "Text", message.text,
         json.loads(
@@ -303,9 +303,11 @@ async def main() -> None:
     # And the run events 
     await dp.start_polling(bot)
 
+
 async def hello(request):
     return web.Response(text="Hello, world")
-    
+
+
 async def start_server():
     pass
     # app = web.Application()
@@ -314,6 +316,7 @@ async def start_server():
     # await runner.setup()
     # site = web.TCPSite(runner, "localhost", 5555)
     # await site.start()
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
